@@ -1,36 +1,37 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
-<?php
-if (session()->getFlashData('success')) {
-?>
+
+<?php if (session()->getFlashData('success')) : ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <?= session()->getFlashData('success') ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-<?php
-}
-?>
-<!-- Table with stripped rows -->
-<div class="row">
-    <?php foreach ($product as $key => $item) : ?>
-        <div class="col-lg-6">
-            <?= form_open('keranjang') ?>
-            <?php
-            echo form_hidden('id', $item['id']);
-            echo form_hidden('nama', $item['nama']);
-            echo form_hidden('harga', $item['harga']);
-            echo form_hidden('foto', $item['foto']);
-            ?>
-            <div class="card">
-                <div class="card-body">
-                    <img src="<?php echo base_url() . "img/" . $item['foto'] ?>" alt="..." width="300px">
-                    <h5 class="card-title"><?php echo $item['nama'] ?><br><?php echo number_to_currency($item['harga'], 'IDR') ?></h5>
-                    <button type="submit" class="btn btn-info rounded-pill">Beli</button>
+<?php endif; ?>
+
+<!-- Produk Grid -->
+<div class="container py-4">
+    <div class="row g-4">
+        <?php foreach ($product as $item) : ?>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <?= form_open('keranjang') ?>
+                <?= form_hidden('id', $item['id']) ?>
+                <?= form_hidden('nama', $item['nama']) ?>
+                <?= form_hidden('harga', $item['harga']) ?>
+                <?= form_hidden('foto', $item['foto']) ?>
+
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column align-items-center text-center">
+                        <img src="<?= base_url('img/' . $item['foto']) ?>" alt="<?= esc($item['nama']) ?>" class="img-fluid mb-3" style="max-height: 200px; object-fit: contain;">
+                        <h5 class="card-title"><?= esc($item['nama']) ?></h5>
+                        <p class="text-primary fw-bold"><?= number_to_currency($item['harga'], 'IDR') ?></p>
+                        <button type="submit" class="btn btn-info rounded-pill mt-auto">Beli</button>
+                    </div>
                 </div>
+                <?= form_close() ?>
             </div>
-            <?= form_close() ?>
-        </div>
-    <?php endforeach ?>
+        <?php endforeach; ?>
+    </div>
 </div>
-<!-- End Table with stripped rows -->
+<!-- End Produk Grid -->
+
 <?= $this->endSection() ?>
