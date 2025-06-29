@@ -42,3 +42,5 @@ $routes->post('kategori', 'KategoriController::create');
 $routes->post('kategori/edit/(:num)', 'KategoriController::edit/$1');
 $routes->get('kategori/delete/(:num)', 'KategoriController::delete/$1');
 
+$routes->resource('api', ['controller' => 'apiController']);
+
