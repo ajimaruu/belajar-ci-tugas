@@ -28,6 +28,16 @@ $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
     $routes->get('clear', 'TransaksiController::cart_clear');
 });
 
+$routes->group('diskon', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'DiskonController::index');              // List diskon
+    $routes->get('create', 'DiskonController::create');       // Form tambah
+    $routes->post('store', 'DiskonController::store');        // Simpan tambah
+    $routes->get('edit/(:num)', 'DiskonController::edit/$1'); // Form edit
+    $routes->post('update/(:num)', 'DiskonController::update/$1'); // Simpan edit
+    $routes->get('delete/(:num)', 'DiskonController::delete/$1');  // Hapus
+});
+
+
 $routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
 $routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
 $routes->get('get-location', 'TransaksiController::getLocation', ['filter' => 'auth']);
@@ -43,4 +53,7 @@ $routes->post('kategori/edit/(:num)', 'KategoriController::edit/$1');
 $routes->get('kategori/delete/(:num)', 'KategoriController::delete/$1');
 
 $routes->resource('api', ['controller' => 'apiController']);
+$routes->get('api/jumlah-item', 'ApiController::jumlah_item');
+
+
 

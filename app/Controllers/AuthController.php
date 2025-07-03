@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
+use App\Models\DiskonModel;
 use App\Models\UserModel;
 
 class AuthController extends BaseController
@@ -30,23 +31,41 @@ public function login()
             $username = $this->request->getVar('username');
             $password = $this->request->getVar('password');
 
-            $dataUser = $this->user->where(['username' => $username])->first(); //pasw 1234567
+            $dataUser = $this->user->where(['username' => $username])->first();
 
             if ($dataUser) {
                 if (password_verify($password, $dataUser['password'])) {
+                    // Set session login
                     session()->set([
-                        'username' => $dataUser['username'],
-                        'role' => $dataUser['role'],
-                        'isLoggedIn' => TRUE
+                        'username'    => $dataUser['username'],
+                        'role'        => $dataUser['role'],
+                        'isLoggedIn'  => TRUE
                     ]);
 
-                    return redirect()->to(base_url('/'));
+                    // Cek diskon hari ini
+                    $diskonModel = new DiskonModel();
+                    $today = date('Y-m-d');
+                    $diskon = $diskonModel->where('tanggal', $today)->first();
+
+                    if ($diskon) {
+                        session()->set('diskon', $diskon['nominal']);
+                    } else {
+                        session()->remove('diskon');
+                    }
+
+                    // Arahkan sesuai role
+                    if ($dataUser['role'] === 'admin') {
+                        return redirect()->to(base_url('/produk'));
+                    } else {
+                        return redirect()->to(base_url('/'));
+                    }
+
                 } else {
-                    session()->setFlashdata('failed', 'Kombinasi Username & Password Salah');
+                    session()->setFlashdata('failed', 'Password salah');
                     return redirect()->back();
                 }
             } else {
-                session()->setFlashdata('failed', 'Username Tidak Ditemukan');
+                session()->setFlashdata('failed', 'Username tidak ditemukan');
                 return redirect()->back();
             }
         } else {
@@ -58,9 +77,11 @@ public function login()
     return view('v_login');
 }
 
+
 public function logout()
 {
     session()->destroy();
     return redirect()->to('login');
 }
+
 }

@@ -16,6 +16,13 @@
       </form>
     </div><!-- End Search Bar -->
 
+<?php if (session()->has('diskon')): ?>
+    <div class="alert alert-success text-center">
+        Diskon Hari Ini: Rp <?= number_format(session('diskon'), 0, ',', '.') ?>
+    </div>
+<?php endif; ?>
+
+
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
@@ -226,3 +233,7 @@
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+  </header><!-- End Header -->
+
+
+

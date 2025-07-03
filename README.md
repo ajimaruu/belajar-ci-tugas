@@ -1,89 +1,96 @@
-# Toko Online CodeIgniter 4
 
-Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4](https://codeigniter.com/). Sistem ini menyediakan beberapa fungsionalitas untuk toko online, termasuk manajemen produk, keranjang belanja, dan sistem transaksi.
+🛒 JiToko Online - UAS Pemrograman Web Lanjut
 
-## Daftar Isi
+Aplikasi Toko berbasis CodeIgniter 4 sebagai project UAS Mata Kuliah Pemrograman Web Lanjut. Aplikasi ini mendukung manajemen produk, diskon harian, proses pembelian dengan diskon otomatis, penghitungan ongkir via WebService, serta dashboard admin.
 
-- [Fitur](#fitur)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Instalasi](#instalasi)
-- [Struktur Proyek](#struktur-proyek)
+✨ Fitur
 
-## Fitur
+🔐 Autentikasi
+- Login untuk 2 peran: admin dan guest
+- Admin dapat mengelola produk & diskon
+- Guest hanya dapat melihat produk dan belanja
 
-- Katalog Produk
-  - Tampilan produk dengan gambar
-  - Pencarian produk
-- Keranjang Belanja
-  - Tambah/hapus produk
-  - Update jumlah produk
-- Sistem Transaksi
-  - Proses checkout
-  - Riwayat transaksi
-- Panel Admin
-  - Manajemen produk (CRUD)
-  - Manajemen kategori
-  - Laporan transaksi
-  - Export data ke PDF
-- Sistem Autentikasi
-  - Login/Register pengguna
-  - Manajemen akun
-- UI Responsif dengan NiceAdmin template
+📦 Produk
+- Manajemen produk CRUD (Admin)
+- Tampilan katalog produk (Guest & Admin)
 
-## Persyaratan Sistem
+💸 Diskon Harian
+- Diskon otomatis berdasarkan tanggal login
+- Diskon ditampilkan di header jika tersedia
+- Validasi: Tidak boleh ada 2 diskon untuk tanggal sama
 
-- PHP >= 8.2
-- Composer
-- Web server (XAMPP)
+🛒 Keranjang & Checkout
+- Tambah produk ke keranjang (diskon otomatis diterapkan)
+- Edit & hapus isi keranjang
+- Checkout dengan alamat + ongkir (via WebService RajaOngkir)
+- Simpan transaksi + detail produk + diskon per item
 
-## Instalasi
+🧾 Transaksi & Riwayat
+- Halaman profil untuk melihat riwayat belanja
+- Detail transaksi menampilkan jumlah item dan diskon yang diterapkan
 
-1. **Clone repository ini**
-   ```bash
-   git clone [URL repository]
+📊 Dashboard
+- Dashboard admin dengan data transaksi via WebService
+- Menampilkan total harga, ongkir, jumlah item, status transaksi
+
+🧰 Instalasi
+
+1. Clone repositori:
+   git clone https://github.com/ajimaruu/belajar-ci-tugas.git
    cd belajar-ci-tugas
-   ```
-2. **Install dependensi**
-   ```bash
+
+2. Install dependensi:
    composer install
-   ```
-3. **Konfigurasi database**
 
-   - Start module Apache dan MySQL pada XAMPP
-   - Buat database **db_ci4** di phpmyadmin.
-   - copy file .env dari tutorial https://www.notion.so/april-ns/Codeigniter4-Migration-dan-Seeding-045ffe5f44904e5c88633b2deae724d2
+3. Buat file .env:
+   Salin dari .env.example jika tersedia, atau buat manual dan atur:
+   - app.baseURL = 'http://localhost:8080'
+   - database.default.hostname = localhost
+   - database.default.database = ci_toko
+   - database.default.username = root
+   - database.default.password = 
+   - COST_KEY = your_rajaongkir_api_key
 
-4. **Jalankan migrasi database**
-   ```bash
-   php spark migrate
-   ```
-5. **Seeder data**
-   ```bash
-   php spark db:seed ProductSeeder
-   ```
-   ```bash
-   php spark db:seed UserSeeder
-   ```
-6. **Jalankan server**
-   ```bash
+4. Set Permissions (Linux):
+   chmod -R 777 writable
+
+5. Jalankan migration & seed:
+   php spark db:seed DiskonSeeder
+
+6. Jalankan project:
    php spark serve
-   ```
-7. **Akses aplikasi**
-   Buka browser dan akses `http://localhost:8080` untuk melihat aplikasi.
 
-## Struktur Proyek
+📂 Struktur Folder Penting
 
-Proyek menggunakan struktur MVC CodeIgniter 4:
+app/
+├── Controllers/
+│   ├── AuthController.php
+│   ├── ProdukController.php
+│   ├── TransaksiController.php
+│   └── ApiController.php
+│
+├── Models/
+│   ├── UserModel.php
+│   ├── DiskonModel.php
+│   ├── TransactionModel.php
+│   └── TransactionDetailModel.php
+│
+├── Views/
+│   ├── v_login.php
+│   ├── v_produk.php
+│   ├── v_keranjang.php
+│   ├── v_checkout.php
+│   ├── v_profile.php
+│   └── layout.php
 
-- app/Controllers - Logika aplikasi dan penanganan request
-  - AuthController.php - Autentikasi pengguna
-  - ProdukController.php - Manajemen produk
-  - TransaksiController.php - Proses transaksi
-- app/Models - Model untuk interaksi database
-  - ProductModel.php - Model produk
-  - UserModel.php - Model pengguna
-- app/Views - Template dan komponen UI
-  - v_produk.php - Tampilan produk
-  - v_keranjang.php - Halaman keranjang
-- public/img - Gambar produk dan aset
-- public/NiceAdmin - Template admin
+🌐 WebService
+
+- Endpoint API:
+  - /api → semua transaksi
+  - /api/jumlah-item?id=1 → total item pada transaksi ID = 1
+- Digunakan oleh dashboard sederhana (HTML + PHP + Bootstrap)
+
+💬 Lisensi
+
+Project ini dikembangkan untuk keperluan pembelajaran dan UAS.  
+Framework: CodeIgniter 4 (https://codeigniter.com)
